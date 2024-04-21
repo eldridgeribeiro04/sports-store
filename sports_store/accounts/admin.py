@@ -1,13 +1,14 @@
+# Register your models here.
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from accounts.forms import CustomerUserChangeForm, CustomUserCreateForm
-from accounts.models import CustomUser
-# Register your models here.
 
-class CustomerUserAdmin(UserAdmin):
-    add_form = CustomUserCreateForm
-    form = CustomerUserChangeForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .models import CustomUser
+
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
     model = CustomUser
-    list_display = ["email", "username"]
+    list_display = ["email", "username",]
 
-admin.site.register(CustomUser, CustomerUserAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
