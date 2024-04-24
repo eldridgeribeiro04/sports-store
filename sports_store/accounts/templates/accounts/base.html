@@ -22,8 +22,11 @@
     
         <ul class="nav navbar-nav navbar-right">
           {% if user.is_authenticated %}
-          Hi {{ user.username }}!
-          <br>
+          <a href="{% url 'update' pk=user.pk%}">
+            <span class="glyphicon glyphicon-user"></span>
+            {{ user.username }}</a>!
+          
+          
 
           <p>
             <form action="{% url 'logout' %}" method="post">
@@ -32,8 +35,6 @@
             <button type="submit">Logout</button>
             </form>
           </p>
-
-          <a href="{% url 'update' pk=user.pk%}">Update details</a>
 
           {% else %}
           <p>You are not logged in</p>

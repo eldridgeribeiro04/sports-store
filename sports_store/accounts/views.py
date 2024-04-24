@@ -14,14 +14,14 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
-    template_name = "registration/signup.html"
+    template_name = "accounts/signup.html"
 
 
 class ProfileUpdateView(UpdateView):
     model = CustomUser
     form_class = CustomUserChangeForm
     success_url = reverse_lazy("login")
-    template_name = "registration/update.html"
+    template_name = "accounts/update.html"
 
     def get_object(self, queryset=None):
         return get_object_or_404(CustomUser, pk=self.kwargs.get('pk'))
