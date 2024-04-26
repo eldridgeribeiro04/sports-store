@@ -7,7 +7,8 @@ from .models import Brand
 # Create your views here.
 
 def home(request):
-    # template = loader.get_template("home.html")
     brands = Brand.objects.all()
-    return render(request, "product/home.html", {
-        "brands":brands})
+    return render(request, "accounts/base.html", {
+        'brands': brands
+    })
+
