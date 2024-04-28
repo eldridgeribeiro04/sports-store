@@ -75,13 +75,29 @@
   }
 </style>
 
-{% block content %}
-<div class="container">
-<div class="jumbotron">
-  <h3 class="heading">The front page</h3>
+  {% block content %}
+
+  <div class="container">
+  <div class="jumbotron">
+  <h3 style="text-align: center;">All Brands</h3>
+
+  <div class="container">
+  <div class="row" style="text-align: center;">
+    {% for b in brands %}
+    <div class="col-sm-3 col-lg-6">
+      <div class="thumbnail" style="height: 200px; width: 400px;;">
+        <a href="{% url 'product:items' b.id %}"><img src="{{b.logo.url}}" style="min-height: 100px; text-align: center;"></a>
+        <div class="caption">
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 </div>
 </div>
-{% endblock %}
+</div>
+
+  {% endblock %}
 
 </body>
 

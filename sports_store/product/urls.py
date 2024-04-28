@@ -4,5 +4,6 @@ from . import views
 app_name = "product"
 
 urlpatterns = [
-    path("home_page/", views.home, name="home_page")
+    path("items/<int:brand_id>/", views.items, name="items"),
+    path("single/<int:item_id>/", views.item_view, name="single"),
 ]
