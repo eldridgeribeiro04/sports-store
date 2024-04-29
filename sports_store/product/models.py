@@ -29,8 +29,6 @@ class Gender(models.Model):
 
 class Category(models.Model):
     category_type = models.CharField(max_length=255)
-    brand = models.ManyToManyField(Brand)
-    gender = models.ManyToManyField(Gender)
 
     class Meta:
         ordering = ['category_type']
@@ -52,6 +50,7 @@ class Item(models.Model):
     is_sold = models.BooleanField(default=False)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='brands')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    gender = models.ForeignKey(Gender, default=1, on_delete=models.CASCADE, null=True)
 
     class Meta:
         ordering = ['name']

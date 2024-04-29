@@ -1,0 +1,25 @@
+{% extends "core/base.html" %}
+
+{% block title %}Category |{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="jumbotron">
+        <h3 style="text-align: center;">Categories</h3>
+
+        <div class="container">
+            <div class="row" style="text-align: center;">
+                {% for category in categories %}
+                <div class="col-sm-2 col-lg-12">
+                    <div class="thumbnail">
+                        <a href="{url 'product:items' brand_id=brand.id}">{{category.category_type}}</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+         </div>
+    </div>
+</div>
+
+{% endblock %}

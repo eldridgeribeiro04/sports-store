@@ -20,7 +20,7 @@
 
 <body>
 
-    <div class="navbar navbar-defaul" style="background-color:gray">
+    <div class="navbar navbar-default" style="background-color:gray">
     <div class="container-fluid">
 
       <div class="navbar-header">
@@ -86,7 +86,7 @@
     {% for b in brands %}
     <div class="col-sm-3 col-lg-6">
       <div class="thumbnail" style="height: 200px; width: 400px;;">
-        <a href="{% url 'product:items' b.id %}"><img src="{{b.logo.url}}" style="min-height: 100px; text-align: center;"></a>
+        <a href="{% url 'product:items' brand_id=b.id %}"><img src="{{b.logo.url}}" style="min-height: 100px; text-align: center;"></a>
         <div class="caption">
         </div>
       </div>
