@@ -1,0 +1,15 @@
+{% extends "base/home.html" %}
+
+{% block title %} | Add quantity {% endblock  %}
+
+{% block content %}
+
+<h1>Update Quantity for {{product.brand.brand_name}} | {{ product.product_name }}</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Current Quantity: {{ form.quantity.value }}</p>
+    {{ form.as_p }}
+    <button type="submit">Add</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base/home.html" %}
+
+
+    <title> |{{ brand.brand_name }}</title>
+    
+<body>
+    {% block content %}
+    <div class="container">
+        <h1>Products of {{ brand.brand_name }}</h1>
+
+        <form method="get" action="{% url 'base:brand' brand.brand_name %}">
+            <div class="form-group">
+                <label for="category">Filter by Category:</label>
+                <select class="form-control" id="" name="category">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category == selected_category %}selected{% endif %}>
+                            {{ category.category_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
+        <hr>
+
+    {% if products %}
+
+        {% for p in products %}
+
+            <ul>
+                <li><a href="{% url 'base:product' p.brand p.id %}">{{ p.product_name }}</a></li>
+            </ul>
+        {% endfor %}
+    
+    {% else %}
+        <p>No products found for this brand.</p>
+        {% if user.is_superuser %}
+        <a href="{% url 'base:add_product' %}">Add a product</a>
+        {% endif %}
+    {% endif %}
+
+    
+</body>
+
+{% endblock %}

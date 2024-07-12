@@ -1,0 +1,43 @@
+{% extends "base/home.html" %}
+
+{% block title %} | {{ single_product.product_name }} {% endblock %}
+
+{% block content %}
+
+<div class="container">
+<h1>{{ single_product.product_name }}</h1>
+
+<p>Size: {{ single_product.size }}</p>
+<p>Price: {{ single_product.price }}</p>
+<p> Brand: {{ single_product.brand}}</p>
+
+{% if single_product.quantity is not None %}
+<p> Available: {{ single_product.quantity }}</p>
+<a href=""><button type="button">Buy now</button></a>
+<a href="{% url 'shop_cart:add_to_cart' single_product.id %}"><button type="button">Add to cart</button></a>
+{% else %}
+    <p>Out of stock</p>
+{% endif %}
+
+{% if user.is_superuser %}
+<a href="{% url 'base:add_quantity' single_product.id%}"><button type="button">Add quantity</button></a>
+{% endif %}
+<br>
+<br>
+
+{% if related_products %}
+<h3>Related products</h3>
+{% for p in related_products %}
+<p>{{ p.product_name }}</p>
+{% endfor %}
+{% else %}
+<h2>Other products you may like</h3>
+{% for o in other_products %}
+
+<a href="{% url 'base:product' o.brand o.id %}"><p>{{ o.product_name }}</p></a>
+{% endfor %}
+{% endif%}
+
+</div>
+
+{% endblock %}

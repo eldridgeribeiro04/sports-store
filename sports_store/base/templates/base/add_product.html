@@ -1,0 +1,58 @@
+{% extends "base/home.html" %}
+    <title>Add product</title>
+
+    {% block content %}
+    <body>
+
+    <h1>Add Product</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="pname">Product name:</label>
+            {{ form.product_name }}
+        </div>
+        <br>
+        
+        <div class="form-group">
+            <label for="price">Price:</label>
+            {{ form.price }}
+        </div>
+        <br>
+
+        <div class="form-grouo">
+            <label for="category">Category:</label>
+            {{ form.category }}
+            <br>
+            <p>If category does not exist: <a href="{% url 'base:add_category' %}">Add Category</a></p>
+        </div>
+        <br>
+
+        <div class="form-grouo">
+            <label for="brand">Brand:</label>
+            {{ form.brand }}
+            <br>
+            <p>If Brand does not exist: <a href="{% url 'base:add_brand' %}">Add Brand</a></p>
+        </div>
+        <br>
+
+        <div class="form-group">
+            <label for="size">Size:</label>
+            {{ form.size }}
+        </div>
+        <br>
+
+        <div class="form-group">
+            <label for="quantity">Quantity:</label>
+            {{ form.quantity }}
+        </div>
+        <br>
+
+        
+        <button type="submit">Add product</button>
+    </form>
+    
+</body>
+    {% endblock %}
+    

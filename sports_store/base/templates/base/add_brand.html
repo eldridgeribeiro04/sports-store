@@ -1,0 +1,18 @@
+{% extends "base/home.html" %}
+
+    {% block title %} | Add Brand {% endblock %}
+
+    {% block content %}
+<body>
+
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Brand</button>
+        </form>
+    </div>
+    
+    
+</body>
+    {% endblock %}

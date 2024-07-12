@@ -15,7 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
+TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 
 
 # Quick-start development settings - unsuitable for production
@@ -40,10 +40,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
-    'rest_framework',
-    
-    "store",
+    "base",
     "accounts",
+    "shop_cart",
     ]
 
 MIDDLEWARE = [
@@ -61,7 +60,7 @@ ROOT_URLCONF = "sports_store.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [TEMPLATES_DIR],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -118,6 +117,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Custom user model
+AUTH_USER_MODEL = "accounts.MyUser"
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -127,9 +129,9 @@ STATIC_URL = "static/"
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-#     ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    ]
 
 
 # Default primary key field type
@@ -137,8 +139,8 @@ STATIC_URL = "static/"
 
 # DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# LOGIN_REDIRECT_URL = "home"
-# LOGOUT_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "base:home"
+# LOGOUT_REDIRECT_URL = "base:home"
 
 # PAYMENT_HOST = 'localhost:8000'
 
