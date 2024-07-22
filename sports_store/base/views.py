@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 
+from base.filter import ProductFilter, BrandFilter
+
 from base.forms import BrandForm, CategoryForm, ProductForm, IncreaseProductForm
 from base.models import Product, Category, Brand
 
@@ -7,12 +9,23 @@ from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 
-
 def home(request):
+    products = Product.objects.all()
     brand = Brand.objects.all()
+    
+    myFilter = ProductFilter(request.GET, queryset=products)
+    brand = myFilter.qs
+    
     return render(request, 'base/home.html', {
         'brand': brand,
+        'products': products,
+        'myFilter': myFilter
         })
+    
+    
+def most_viewed_products(request):
+    most_viewed = Product.objects.order_by('-views')[:5]
+    return render(request, 'base/home.html', {'most_viewed': most_viewed})
     
 
 def filter_by_brand(request,brand_name):
@@ -48,6 +61,7 @@ def single_product_view(request, product_id, brand_name):
         'related_products': related_products,
         'other_products': other_products})
      
+
 
 def add_brand(request):
     if request.method == 'POST':
