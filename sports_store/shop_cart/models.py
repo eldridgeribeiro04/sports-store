@@ -8,6 +8,7 @@ class Cart(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    paid = models.BooleanField(default=False)
     
     def __str__(self):
         return f"Cart for user {self.user}"
@@ -20,7 +21,7 @@ class Cart(models.Model):
             cart_item.quantity += quantity
         cart_item.save()
         self.update_total_price()
-        
+
     def update_total_price(self):
         self.total_price = sum(item.get_total_price() for item in self.items.all())
         self.save()

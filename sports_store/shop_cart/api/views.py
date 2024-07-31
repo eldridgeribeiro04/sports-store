@@ -1,65 +1,70 @@
+from rest_framework.views import APIView
+from rest_framework import generics, status
+
+from rest_framework.response import Response
+
+from shop_cart.models import Cart, CartItem
+from base.models import Product
+from shop_cart.api.serializers import *
+
 from django.shortcuts import get_object_or_404
 
-from shop_cart.api.serializers import *
-from shop_cart.models import *
 
-from rest_framework import status, mixins, generics, viewsets
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.decorators import action
-
-
-class CartViewSet(viewsets.ModelViewSet):
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
+class GetCartView(APIView):
     
-    def get_queryset(self):
-        user = self.request.user
-        return Cart.objects.filter(user=user)
+    def get_cart(self, request, *args, **kwargs):
+        user = request.user
+        
+        if user.is_authenticated:
+            cart, created = Cart.objects.get_or_create(user=user)
+        else:
+            cart_id = request.session.get('cart_id')
+            if cart_id:
+                cart = Cart.objects.get(id=cart_id)
+            else:
+                cart = Cart.objects.create(user=None)
+                request.session['cart_id'] = cart.id
+        return cart        
+        
+    def get(self, request, *args, **kwargs):
+        cart = self.get_cart(request)
+        serializer = CartSerializer(cart)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def add_item(self, request, pk=None):
-        cart = self.get_object()
-        product_id = request.data.get('product_id')
+
+class CartView(GetCartView):
+    
+    def post(self, request, product_id, *args, **kwargs):
+        cart = self.get_cart(request)
+        product = get_object_or_404(Product, pk=product_id)
         quantity = request.data.get('quantity', 1)
         
-        try:
-            product = Product.objects.get(id=product_id)
+        if not product_id or not quantity:
+            return Response('Invalid request data', status=status.HTTP_400_BAD_REQUEST)        
+        
+        if product.quantity > 0:
             cart.add_item(product, quantity)
-            cart_serializer = CartSerializer(cart)
-            return Response(cart_serializer.data, status=status.HTTP_200_OK)
-        except:
-            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+            product.quantity -= quantity
+            product.save()
+         
+        # cart.update_total_price()
         
-    @action(detail=True, methods=['post'])
-    def remove_item(self, request, pk=None):
-        cart = self.get_object()
-        product_id = request.data.get('product_id')
+        serializer = CartSerializer(cart)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def delete(self, request, product_id):
+        cart = self.get_cart(request)
+        cart_item = get_object_or_404(CartItem, cart=cart, product_id=product_id)        
+        cart_item.remove_item()
         
-        try:
-            product = Product.objects.get(id=product_id)
-            cart.remove_item(product)
-            cart_serializer = CartSerializer(cart)
-            return Response(cart_serializer.data, status=status.HTTP_200_OK)
-        except:
-            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_200_OK)
+    
+
+class ClearCart(GetCartView):
+    
+    def post(self, request):
+        cart = self.get_cart(request)
+        cart.clear_cart()
         
-    @action(detail=True, methods=['post'])
-    def clear(self, request, pk=None):
-        cart = self.get_object()
-        cart.clear_cart() 
-        cart_serializer = CartSerializer(cart)
-        return Response(cart_serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
     
-    
-class CartItemSerializer(viewsets.ModelViewSet):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
-    
-    def get_queryset(self):
-        cart_id = self.kwargs.get('cart_pk')
-        return CartItem.objects.filter(cart_id=cart_id)
-    
-    def perform_create(self, serializer):
-        cart_id = self.kwargs.get('cart_pk')
-        serializer.save(cart_id=cart_id)

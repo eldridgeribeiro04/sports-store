@@ -45,8 +45,11 @@ INSTALLED_APPS = [
     "base",
     "accounts",
     "shop_cart",
+    "payment",
     
     "rest_framework",
+    "rest_framework.authtoken",
+    # "knox",
     ]
 
 MIDDLEWARE = [
@@ -139,13 +142,20 @@ STATICFILES_DIRS = [
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-    ],
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.BasicAuthentication',
+    # ],
     
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.IsAuthenticated',
-    # ]
+    # ],
+    
+    # 'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    
 }
 
 
@@ -159,3 +169,5 @@ LOGIN_REDIRECT_URL = "base:home"
 
 # PAYMENT_HOST = 'localhost:8000'
 
+STRIPE_PUBLIC_KEY = 'your-stripe-public-key'
+STRIPE_SECRET_KEY = 'your-stripe-secret-key'

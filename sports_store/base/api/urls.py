@@ -1,18 +1,22 @@
 from django.urls import path
+
 from base.api import views
 
 app_name = 'base'
 
 urlpatterns = [
-    path('brand/', views.BrandAPIView.as_view(), name='brand'),
-    path('brand/<int:pk>/', views.BrandDetailAPIView.as_view(), name='brand_detail'),
+    # Brand
+    path('brand/', views.BrandListView.as_view(), name='brandlist'),
+    path('brand/<int:pk>/', views.BrandDetailView.as_view(), name='branddetail'),
     
-    path('category/', views.CategoryAPIView.as_view(), name='category'),
-    path('category/<int:pk>/', views.CategoryDetailAPIView.as_view(), name='category_detail'),
+    # Category
+    path('category/', views.CategoryListView.as_view(), name='categorylist'),
+    path('category/<int:pk>/', views.CategoryDetailView.as_view(), name='categorydetail'),
     
-    path('product/', views.ProductAPIView.as_view(), name='product'),
-    path('product/<int:pk>/', views.ProductDetailAPIView.as_view(), name='product_detail'),
+    # Product
+    path('product/', views.ProductListView.as_view(), name='productlist'),
+    path('product/<int:pk>/', views.ProductDetailView.as_view(), name='productdetail'),
     
-    path('add/<int:pk>/', views.IncreaseQuantityAPIView.as_view(), name='increase_quantity'),
-
+    # Increase quantity
+    path('product/<int:pk>/increase_quantity/', views.AddProductQuantityView.as_view(), name='increase_quantity'),
 ]
